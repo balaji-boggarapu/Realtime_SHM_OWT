@@ -1,10 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
 from scipy.integrate import solve_ivp
 from scipy.integrate import quad
 from scipy.signal import find_peaks
-import pandas as pd
 
 # Parameters of the tower
 r_base  = 2 # Radius at the base of the tower [in m]

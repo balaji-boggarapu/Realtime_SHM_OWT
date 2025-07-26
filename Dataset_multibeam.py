@@ -1,9 +1,7 @@
 import numpy as np
-from matplotlib.colors import LinearSegmentedColormap
 from scipy.integrate import solve_ivp
 from scipy.integrate import quad
 from scipy.signal import find_peaks
-import pandas as pd
 
 # Parameters of the tower
 r_base  = 2 # Radius at the base of the tower [in m]
@@ -209,8 +207,6 @@ system_matrix_abovewater = []
 IC_counter = 0
 
 for Z0, dZ0 in IC_vals:  
-    IC_counter+=1
-    print(IC_counter)
     t_vals_1, Z_t_1, Z_dot_1 = solve_motion(t_span, t_eval, Z0, dZ0, "underwater") # Solving for section underwater
     displacements_underwater = displacement(Z_t_1, y_vals_underwater) # Calculate displacements at different heights
     displacements_underwater_flattened = displacements_underwater.flatten()
