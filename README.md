@@ -100,4 +100,4 @@ What makes this project unique is how it bridges theory with industry reality:
 - Uses tools and workflows similar to those adopted in digital O&M platforms
 - Aligns closely with trends like digital twins, predictive maintenance, and data-driven wind farm optimization
 
-The architecture mirrors how modern offshore operators are integrating SCADA data, monitoring dashboards, and AI-based diagnostics to improve turbine reliability while reducing O&M costs. 
+The architecture mirrors how modern offshore operators are integrating SCADA data, monitoring dashboards, and AI-based diagnostics to improve turbine reliability while reducing O&M costs.
