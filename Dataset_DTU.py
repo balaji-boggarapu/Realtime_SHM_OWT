@@ -70,8 +70,8 @@ print(load_df_downsampled.shape)
 main_df = pd.concat([load_df_downsampled.reset_index(drop=True),data_wind_df.reset_index(drop=True)], axis=1)
 print(load_df_downsampled.shape)
 
-'''# Pushing the code to MySQL
-password = urllib.parse.quote_plus("Balaji@1998") # To encode the @ character
+# Pushing the code to MySQL
+'''password = urllib.parse.quote_plus("Balaji@1998") # To encode the @ character
 engine = create_engine(f"mysql+mysqlconnector://balaji_user:{password}@127.0.0.1:3306/wind_db") # Pushing both the dataframes to MySQL server
 
 # Pushing the dataframes to MySQL server
