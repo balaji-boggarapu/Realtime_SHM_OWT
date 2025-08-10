@@ -50,7 +50,7 @@ channels = [
 file_path_wind = r"C:\Projects\DTU Dataset\Hov_au100max_ts_uv\wind_data_from_Mark\Timeseries_filtered_O2butter_0.1Hz\Hov_au100max_ts_uv\Hov_au100max_uv100,160_U8_200504081210.csv"
 
 data_wind_raw = pd.read_csv(file_path_wind, header=None)
-data_wind = data_wind_raw.T
+data_wind_df = data_wind_raw.T
 columns_wind = [
     "Stream-wise velocity in m/s at 100m",
     "Stream-wise velocity in m/s at 160m",
@@ -58,11 +58,22 @@ columns_wind = [
     "Transverse velocity in m/s at 160m"
 ]
 
-data_wind.columns = columns_wind
+data_wind_df.columns = columns_wind
 
+# Downsampling the load data from 100Hz to 1Hz to match the wind speed data
+load_df = pd.DataFrame(data.T, columns=channels)
+load_df_downsampled = load_df.iloc[::100]
+print(data_wind_df.shape)
+print(load_df_downsampled.shape)
+
+# Joining the dataframes
+main_df = pd.concat([load_df_downsampled.reset_index(drop=True),data_wind_df.reset_index(drop=True)], axis=1)
+print(load_df_downsampled.shape)
+
+'''# Pushing the code to MySQL
 password = urllib.parse.quote_plus("Balaji@1998") # To encode the @ character
 engine = create_engine(f"mysql+mysqlconnector://balaji_user:{password}@127.0.0.1:3306/wind_db") # Pushing both the dataframes to MySQL server
 
-'''# Pushing the dataframes to MySQL server
-data_wind.to_sql(name='wind_measurements', con=engine, if_exists='replace', index=False)'''
-print(engine.url)
+# Pushing the dataframes to MySQL server
+data_wind.to_sql(name='wind_measurements', con=engine, if_exists='replace', index=False)
+print(engine.url)'''
