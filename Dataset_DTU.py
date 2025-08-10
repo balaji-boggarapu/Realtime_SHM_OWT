@@ -1,14 +1,15 @@
 import numpy as np
 import os
 import pandas as pd
-import matplotlib.pyplot as plt
+from sqlalchemy  import create_engine
+import urllib.parse
 
-file_path = "C:\Projects\DTU Dataset\load_results\load_results\constrained_box_shearShifted_wind_speed_8.5_event_200504081210_seed_1180.bin"
-file_size = os.path.getsize(file_path)
+# Fetching the load data of a randon timestamp from the dataset
 
-# print(f"File size = {file_size}")
+file_path_load = "C:\Projects\DTU Dataset\load_results\load_results\constrained_box_shearShifted_wind_speed_8.5_event_200504081210_seed_1180.bin"
 
-data = np.fromfile(file_path, dtype = np.float32).reshape(29, 60000)
+
+data = np.fromfile(file_path_load, dtype = np.float32).reshape(29, 60000)
 
 channels = [
     "Tower base moment about the x axis (kNm)",
@@ -42,8 +43,26 @@ channels = [
     "Blade 3 tip deflection in the z direction (m)"
 ]
 
-df = pd.DataFrame(data.T, columns = channels)
 
-plt.plot(df.iloc[:,-3])
-plt.axhline(df.iloc[:,-3].mean(), color = 'red')
-plt.show()
+
+# Fetching the load data of a randon timestamp from the dataset
+
+file_path_wind = r"C:\Projects\DTU Dataset\Hov_au100max_ts_uv\wind_data_from_Mark\Timeseries_filtered_O2butter_0.1Hz\Hov_au100max_ts_uv\Hov_au100max_uv100,160_U8_200504081210.csv"
+
+data_wind_raw = pd.read_csv(file_path_wind, header=None)
+data_wind = data_wind_raw.T
+columns_wind = [
+    "Stream-wise velocity in m/s at 100m",
+    "Stream-wise velocity in m/s at 160m",
+    "Transverse velocity in m/s at 100m",
+    "Transverse velocity in m/s at 160m"
+]
+
+data_wind.columns = columns_wind
+
+password = urllib.parse.quote_plus("Balaji@1998") # To encode the @ character
+engine = create_engine(f"mysql+mysqlconnector://balaji_user:{password}@127.0.0.1:3306/wind_db") # Pushing both the dataframes to MySQL server
+
+'''# Pushing the dataframes to MySQL server
+data_wind.to_sql(name='wind_measurements', con=engine, if_exists='replace', index=False)'''
+print(engine.url)
