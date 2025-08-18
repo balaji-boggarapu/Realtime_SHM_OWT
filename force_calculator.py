@@ -1,10 +1,12 @@
 import numpy as np
 from scipy.integrate import quad
 from structure_parameters import StructureParameters
+import random
 
 class ForceCalculator(StructureParameters):
     def __init__(self):
         super().__init__()
+        self.val = random.uniform(3,6)
 
 
     # Calculating the force on concentrated mass due to wind
@@ -12,7 +14,7 @@ class ForceCalculator(StructureParameters):
         # Calculate the reference area
         A = np.pi * (self.r_hub ** 2)
         v_air = self.v_ref * (np.log(self.L_tower / self.z_0) / np.log(self.z_r / self.z_0))  # v_ref * k_r * np.log(L_tower / z_r)
-        F_wind = 0.5 * self.c_d * self.rho_air * A * (v_air ** 2)
+        F_wind = 0.5 * self.c_d * self.rho_air * A * (v_air ** 2) * self.val
         return F_wind
 
     # Calculating the aerodynamic force
@@ -23,7 +25,7 @@ class ForceCalculator(StructureParameters):
             v_air = self.v_ref * (np.log(y / self.z_0) / np.log(
                 self.z_r / self.z_0))  # From [31] # v_ref * k_r * np.log(y / z_r) (This is what authors have used)
             A_y = 2 * np.pi * r_y  # Circumference at height y (upon integrating gives the exposed area)
-            return 0.5 * self.c_aero * self.rho_air * A_y * (v_air ** 2)
+            return 0.5 * self.c_aero * self.rho_air * A_y * (v_air ** 2) * self.val
 
         # Calculating the wind force by integrating the integrand from d to L
         F_aero = quad(integrand_wind, self.d, self.L_tower)
@@ -59,6 +61,7 @@ class ForceCalculator(StructureParameters):
         F_i = quad(integrand_inertia, -self.d, nta, args=(t,))
 
         # From Morisson's equation
+
         F_wave = F_d[0] + F_i[0]
 
         return F_wave
